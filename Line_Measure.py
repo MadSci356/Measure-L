@@ -66,7 +66,7 @@ def nearest_line(line, ln_set):
         closes_lines.append(current_index)
         return closest_lines
     else:
-        print "Input line is paired."
+        print "Input line is paired." #-NOT accurate!
 ##        print "Input Line Index:", set.index(line)
         closest_lines.append(None)
 ##        print "Current Output:", closest_lines
