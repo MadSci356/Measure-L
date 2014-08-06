@@ -33,42 +33,45 @@ def dist((p1, p2)):
 def nearest_line(line, ln_set): 
     set = list(ln_set)
     start_points = line_points(line)
-    current_points = line_points(set[0])
-    lowest_dist = min(dist((start_points[0], current_points[0])), dist((start_points[0], current_points[1])))  
+    lowest_dist = None
     current_index = None
     closest_lines = []
-    for l in set[1:]:						#Closest distance from START point of input line to another point of an another line.
+    for l in set:						#Closest distance from START point of input line to another point of an another line.
         if round(l.angle()) == round(line.angle()):  #Should test rounded angle values on Triangles
             if start_points != line_points(l):
                 current_points = line_points(l)
                 current_dist = min(dist((start_points[0], current_points[0])), dist((start_points[0], current_points[1]))) #1st element of start_points
+                if lowest_dist == None:         #This should only happen ONCE
+                    lowest_dist = current_dist
                 if current_dist < lowest_dist and current_dist > 0:
                     lowest_dist = current_dist
                     current_index = set.index(l)
 	
     closest_lines.append(current_index)
 	
-    lowest_dist = min(dist((start_points[1], current_points[0])), dist((start_points[1], current_points[1]))) 	#Reset variables
+    lowest_dist = None	#Reset variables
     current_index = None
-    for l in set[1:]:						#Closest distance from END point of input line to another point of an another line.
+    for l in set:						#Closest distance from END point of input line to another point of an another line.
         if round(l.angle()) == round(line.angle()):
             if start_points != line_points(l):
                 current_points = line_points(l)
                 current_dist = min(dist((start_points[1], current_points[0])), dist((start_points[1], current_points[1]))) #2nd element of start_points
+                if lowest_dist == None:         #This should only happen ONCE
+                    lowest_dist = current_dist
                 if current_dist < lowest_dist and current_dist > 0:
                     lowest_dist = current_dist
                     current_index = set.index(l)
                     
     if current_index not in closest_lines:
-            closes_lines.append(current_index)
-            return closest_lines
+        closes_lines.append(current_index)
+        return closest_lines
     else:
-            print "Input line is a single point"
-            print "Line Points:", line_points(line)
-            closest_lines.append(-1)
-            print "Current Output:", closest_lines
-            return closest_lines
-		
+        print "Input line is paired."
+##        print "Input Line Index:", set.index(line)
+        closest_lines.append(None)
+##        print "Current Output:", closest_lines
+        return closest_lines
+    	
 
 def group_lines(line_set):
 	set = list(line_set)
