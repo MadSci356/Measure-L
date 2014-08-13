@@ -90,7 +90,26 @@ def relative_position(line1, line2):
     x2_diff = pt1[1][0] - pt2[1][0]  #diff of end x points
     y2_diff = pt1[1][1] - pt2 [1][1] #diff of end y points
     
-    
+def good_random_color(n):
+    from random import choice
+    color_set = list(Color.colorlist)
+    color_set.remove((0,0,0))   #Don't want White once
+    color_set.remove((0,0,0))   #or twice...
+    color_set.remove((255,255,255)) #The shapes are black
+    color_set.remove((255,255,240))
+    prev = choice(color_set)
+    random_color = [prev]
+    for i in range(n-1):
+        same = True
+        while same:
+            next = choice(color_set)
+            if next != prev:
+                same = False        
+        random_color.append(next)
+        prev = next
+    return random_color          
+         
+        
 
 ###------------Fundamentals------------###
 img_src = "test5.jpg"
@@ -98,9 +117,14 @@ img = Image(img_src)
 res = img.size()
 lines = img.findLines() 
 ppi = round(ppi(15.6))
+drawing_1 = img.dl()
+drawing_1.setFontSize(35)
 #------------END Fundamentals------------###
-
-print nearest_line(lines[7], lines)
+##print len(lines)
+##for color in enumerate(good_random_color(8)):
+##    print color[0], color[1]
+    
+##print nearest_line(lines[7], lines)
                   
 ##for l in lines:
 ##    print "Index:", lines.index(l), line_points(l)
@@ -109,13 +133,17 @@ print nearest_line(lines[7], lines)
 ##    print l.angle(), "degrees"
 ##    print ""
 
-      
-##try:
-##    disp = Display(resolution = res)
-##    while disp.isNotDone():
-##        lines.draw(autocolor = True, width = 2) #alternate color to show detection
-##        img.save(disp)
-##        sleep(.01)
-##
-##except pg_err:
-##    pass
+
+rand_color = good_random_color(len(lines)) #color chosen outside loop
+try:
+    disp = Display(resolution = res)
+    while disp.isNotDone():
+        mouse_pos = str((disp.mouseX, disp.mouseY))
+        drawing_1.ezViewText(mouse_pos, (0,0))
+        for feature in zip(lines, rand_color):
+            feature[0].draw(color=feature[1], width = 2)
+        img.save(disp)
+        sleep(.01)
+
+except pg_err:
+    pass
