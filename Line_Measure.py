@@ -31,54 +31,53 @@ def dist((p1, p2)):
     return (x_diff**2 + y_diff**2)**0.5
 
 def nearest_line(line, ln_set): 
-    set = list(ln_set)
+    dup_set = list(ln_set)
     start_points = line_points(line)
     lowest_dist = None
-    current_index = None
+    current_index = -100
     closest_lines = []
-    for l in set:						#Closest distance from START point of input line to another point of an another line.
+    for l in dup_set:						#Closest distance from START point of input line to another point of an another line.
         if round(l.angle()) == round(line.angle()):  #Should test rounded angle values on Triangles
             if start_points != line_points(l):
                 current_points = line_points(l)
                 current_dist = min(dist((start_points[0], current_points[0])), dist((start_points[0], current_points[1]))) #1st element of start_points
                 if lowest_dist == None:         #This should only happen ONCE
                     lowest_dist = current_dist
+                    current_index = dup_set.index(l)
                 if current_dist < lowest_dist and current_dist > 0:
                     lowest_dist = current_dist
-                    current_index = set.index(l)
-	
+                    current_index = dup_set.index(l)
+
+    
     closest_lines.append(current_index)
 	
     lowest_dist = None	#Reset variables
-    current_index = None
-    for l in set:						#Closest distance from END point of input line to another point of an another line.
+    current_index = -100
+    for l in dup_set:						#Closest distance from END point of input line to another point of an another line.
         if round(l.angle()) == round(line.angle()):
             if start_points != line_points(l):
                 current_points = line_points(l)
                 current_dist = min(dist((start_points[1], current_points[0])), dist((start_points[1], current_points[1]))) #2nd element of start_points
                 if lowest_dist == None:         #This should only happen ONCE
                     lowest_dist = current_dist
+                    current_index = dup_set.index(l)
                 if current_dist < lowest_dist and current_dist > 0:
                     lowest_dist = current_dist
-                    current_index = set.index(l)
+                    current_index = dup_set.index(l)
                     
     if current_index not in closest_lines:
-        closes_lines.append(current_index)
+        closest_lines.append(current_index)
         return closest_lines
     else:
-        print "Only one line found" #-NOT accurate!
-##        print "Input Line Index:", set.index(line)
-        closest_lines.append(None)
+        print "Only one line found" 
+        print "Input Line Index:", dup_set.index(line)
+##        closest_lines.append(None)
 ##        print "Current Output:", closest_lines
         return closest_lines
     	
 
 def group_lines(line_set):
-	set = list(line_set)
-	
-					
-			
-			
+    set = list(line_set)	
 	
 def relative_position(line1, line2):
     pt1 = line_points(line1)
@@ -97,7 +96,10 @@ res = img.size()
 lines = img.findLines() 
 ppi = round(ppi(15.6))
 #------------END Fundamentals------------###
-print nearest_line(lines[0], lines)
+##a = lines[5]
+##number = lines.index(a)
+##print number
+print nearest_line(lines[4], lines)
                   
 ##for l in lines:
 ##    print "Index:", lines.index(l), line_points(l)
@@ -106,8 +108,9 @@ print nearest_line(lines[0], lines)
 ##    print l.angle(), "degrees"
 ##    print ""
 
-        
+      
 ##try:
+##    disp = Display(resolution = res)
 ##    while disp.isNotDone():
 ##        lines.draw(autocolor = True, width = 2) #alternate color to show detection
 ##        img.save(disp)
