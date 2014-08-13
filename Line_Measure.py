@@ -48,7 +48,10 @@ def nearest_line(line, ln_set):
                     lowest_dist = current_dist
                     current_index = dup_set.index(l)
 
-    
+    if current_index == -100:
+        print "Error: No line Found."
+        print "Input Line Index:", dup_set.index(line)
+
     closest_lines.append(current_index)
 	
     lowest_dist = None	#Reset variables
@@ -96,10 +99,8 @@ res = img.size()
 lines = img.findLines() 
 ppi = round(ppi(15.6))
 #------------END Fundamentals------------###
-##a = lines[5]
-##number = lines.index(a)
-##print number
-print nearest_line(lines[4], lines)
+
+print nearest_line(lines[7], lines)
                   
 ##for l in lines:
 ##    print "Index:", lines.index(l), line_points(l)
