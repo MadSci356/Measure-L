@@ -2,6 +2,7 @@ from SimpleCV import *
 from pygame import error as pg_err #just so pygame error is not invoked
 from time import sleep
 import sys
+##from webcolors import rgb_to_name
 
 def line_points(Line):
     """Input: Line Object (not line feature "set")
@@ -91,12 +92,63 @@ def relative_position(line1, line2):
     y2_diff = pt1[1][1] - pt2 [1][1] #diff of end y points
     
 def good_random_color(n):
+    """Input n: Number of desired colors"
+    Returns: A list of n tuples containing a RGB tuple and its name
+    Output: [((R, G, B), "Color's Name"), ...]
+    ****R, G, and B are integers****
+    """
+    
+##    BLUE = (0, 0, 255), "Blue"
+##    ORANGE = (255, 165, 0), "Orange"  #willl confuse with Lego orange
+
+##  Discarded because of similarity to Extended Colors
+##    IVORY = (255, 255, 240), "Ivory"
+##    BEIGE = (245, 245, 220), "Beige"
+##    WHEAT = (245, 222, 179), "Wheat"
+##    ROYALBLUE = (8, 76, 158), 
+##    MEDIUMBLUE = (0, 0, 205)
+##    AQUAMARINE = (127, 255, 212), "Aquamarine"
+##    PLUM = (132, 49, 121), "Plum"
+##    INDIGO = (75, 0, 130)
+##    FUCHSIA = (255, 119, 255), "Fuchsia"
+##    CRIMSON = (220, 20, 60)
+    
+    YELLOW = (255, 255, 0), "Yellow" 
+    RED = (255, 0, 0), "Red"
+    LEGO_BLUE = (0,50,150), "Lego Blue" 
+    LEGO_ORANGE = (255,150,40), "Lego Orange"
+    VIOLET = (181, 126, 220), "Violet"
+    GREEN = (0, 128, 0), "Green"
+    GRAY = (128, 128, 128), "Gray"
+
+    #Extended Colors
+    TAN = (210, 180, 140), "Tan"
+    KHAKI = (195, 176, 145), "Khaki"
+    SILVER = (192, 192, 192), "Silver"
+    CHARCOAL = (70, 70, 70), "Charcoal"
+    NAVYBLUE = (0, 0, 128), "Navy (Dark) Blue." 
+    AZURE = (0, 127, 255), "Azure (Blue)"
+    CYAN = (0, 255, 255), "Cyan"
+    TEAL = (0, 128, 128), "Teal (Greenish Blue)"
+    FORESTGREEN = (34, 139, 34), "Forest Green"
+    OLIVE = (128, 128, 0), "Olive"
+    LIME = (191, 255, 0), "Lime"
+    GOLD = (255, 215, 0), "Gold"
+    SALMON = (250, 128, 114), "Salmon"
+    HOTPINK = (252, 15, 192), "Hot Pink"
+    PUCE = (204, 136, 153), "Puce (Dark Pink)"
+    MAROON = (128, 0, 0), "Maroon"
+    
+    my_colorlist = [YELLOW, RED, LEGO_BLUE,
+                    LEGO_ORANGE, VIOLET, GREEN,
+                    GRAY, TAN, KHAKI, SILVER,
+                    CHARCOAL, NAVYBLUE, AZURE, CYAN,
+                    TEAL, FORESTGREEN, OLIVE, LIME,
+                    GOLD, SALMON, HOTPINK, PUCE,
+                    MAROON]
+                    
     from random import choice
-    color_set = list(Color.colorlist)
-    color_set.remove((0,0,0))   #Don't want White once
-    color_set.remove((0,0,0))   #or twice...
-    color_set.remove((255,255,255)) #The shapes are black
-    color_set.remove((255,255,240))
+    color_set = list(my_colorlist)
     prev = choice(color_set)
     random_color = [prev]
     for i in range(n-1):
@@ -112,38 +164,39 @@ def good_random_color(n):
         
 
 ###------------Fundamentals------------###
-img_src = "test5.jpg"
-img = Image(img_src)
+img_src = "test6.jpg"
+img = Image(img_src).erode()
 res = img.size()
 lines = img.findLines() 
 ppi = round(ppi(15.6))
 drawing_1 = img.dl()
 drawing_1.setFontSize(35)
+rand_color = good_random_color(len(lines)) #color chosen outside loop  
 #------------END Fundamentals------------###
 ##print len(lines)
 ##for color in enumerate(good_random_color(8)):
 ##    print color[0], color[1]
     
-##print nearest_line(lines[7], lines)
-                  
-##for l in lines:
-##    print "Index:", lines.index(l), line_points(l)
-##    print round(pixel_inch(l.length(), ppi), 2), "inches"
-##    print l.length(), "pixels"
-##    print l.angle(), "degrees"
-##    print ""
+##print nearest_line(lines[7], lines)            
 
+for line_and_color in zip(lines, rand_color): #[line, ((color tuple), "color name")]
+    print "Index:", lines.index(line_and_color[0]), line_points(line_and_color[0])
+##  temp_color = rgb_to_name(line_and_color[1])
+    print "Color:", line_and_color[1][1]
+    print round(pixel_inch(line_and_color[0].length(), ppi), 2), "inches"
+    print line_and_color[0].length(), "pixels"
+    print line_and_color[0].angle(), "degrees"
+    print ""
 
-rand_color = good_random_color(len(lines)) #color chosen outside loop
-try:
-    disp = Display(resolution = res)
-    while disp.isNotDone():
-        mouse_pos = str((disp.mouseX, disp.mouseY))
-        drawing_1.ezViewText(mouse_pos, (0,0))
-        for feature in zip(lines, rand_color):
-            feature[0].draw(color=feature[1], width = 2)
-        img.save(disp)
-        sleep(.01)
-
-except pg_err:
-    pass
+##try:
+##    disp = Display(resolution = res)
+##    while disp.isNotDone():
+##        mouse_pos = str((disp.mouseX, disp.mouseY))
+##        drawing_1.ezViewText(mouse_pos, (0,0))
+##        for feature in zip(lines, rand_color):#[line, ((color tuple), "color name")]
+##            feature[0].draw(color=feature[1][0], width = 3)
+##        img.save(disp)
+##        sleep(.01)
+##
+##except pg_err:
+##    pass
