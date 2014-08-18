@@ -37,7 +37,7 @@ def nearest_line(line, ln_set):
     lowest_dist = None
     current_index = -100
     closest_lines = []
-    for l in dup_set:						#Closest distance from START point of input line to another point of an another line.
+    for l in dup_set:	    #Closest distance from START point of input line to another point of an another line.
         if round(l.angle()) == round(line.angle()):  #Should test rounded angle values on Triangles
             if start_points != line_points(l):
                 current_points = line_points(l)
@@ -57,7 +57,7 @@ def nearest_line(line, ln_set):
 	
     lowest_dist = None	#Reset variables
     current_index = -100
-    for l in dup_set:						#Closest distance from END point of input line to another point of an another line.
+    for l in dup_set:	    #Closest distance from END point of input line to another point of an another line.
         if round(l.angle()) == round(line.angle()):
             if start_points != line_points(l):
                 current_points = line_points(l)
@@ -159,8 +159,7 @@ def good_random_color(n):
                 same = False        
         random_color.append(next)
         prev = next
-    return random_color          
-         
+    return random_color                  
         
 
 ###------------Fundamentals------------###
@@ -173,15 +172,11 @@ drawing_1 = img.dl()
 drawing_1.setFontSize(35)
 rand_color = good_random_color(len(lines)) #color chosen outside loop  
 #------------END Fundamentals------------###
-##print len(lines)
-##for color in enumerate(good_random_color(8)):
-##    print color[0], color[1]
     
 ##print nearest_line(lines[7], lines)            
 
 for line_and_color in zip(lines, rand_color): #[line, ((color tuple), "color name")]
     print "Index:", lines.index(line_and_color[0]), line_points(line_and_color[0])
-##  temp_color = rgb_to_name(line_and_color[1])
     print "Color:", line_and_color[1][1]
     print round(pixel_inch(line_and_color[0].length(), ppi), 2), "inches"
     print line_and_color[0].length(), "pixels"
